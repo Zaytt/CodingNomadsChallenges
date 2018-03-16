@@ -1,0 +1,7 @@
+challenge:
+- write a class that will use a bufferedReader to read the data in the file and map it to a custom Java object
+- make a new java object for each line of the CSV using ".split()"
+- add each object to an ArrayList of the object type
+- use a for-each loop to calculate the total population in the file and the total number of refugees
+- then create a ratio for the number of refugees in the total population
+- bonus - break it down by individual years

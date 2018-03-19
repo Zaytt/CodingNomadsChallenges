@@ -8,15 +8,13 @@ public class FileReaderThread implements Runnable {
     private Thread thread;
     private String filePath, newFilePath;
     private int threadTurn;
-    public static int currentTurn = 0;
-
+    public static int currentTurn = 1;
 
     public FileReaderThread(String name, String filePath, String newFilePath, int threadTurn) {
         this.thread = new Thread(this, name);
         this.filePath = filePath;
         this.newFilePath = newFilePath;
         this.threadTurn = threadTurn;
-        currentTurn = (currentTurn == 0) ? 1 : currentTurn;
         this.thread.run();
     }
 
@@ -63,12 +61,10 @@ public class FileReaderThread implements Runnable {
                 if(line != null)
                     fileContent += line + "\n";
             }
-
         }catch (IOException e){
             System.out.println("IO Exception!");
             e.printStackTrace();
         }
-
         return fileContent;
     }
 
@@ -77,7 +73,6 @@ public class FileReaderThread implements Runnable {
             BufferedWriter br = new BufferedWriter(fw)){
             br.write(content);
             br.newLine();
-            System.out.println(this.thread.getName() + " writes " + content);
         }catch (IOException e){
             System.out.println("IO Exception!");
             e.printStackTrace();

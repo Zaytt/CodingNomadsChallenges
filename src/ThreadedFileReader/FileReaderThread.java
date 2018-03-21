@@ -5,33 +5,27 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class FileReaderThread implements Runnable {
-    private Thread thread;
+    public Thread thread;
     private String filePath, newFilePath;
     private int threadTurn;
-    public static int currentTurn = 1;
+    public static int currentTurn = 0;
 
     public FileReaderThread(String name, String filePath, String newFilePath, int threadTurn) {
         this.thread = new Thread(this, name);
         this.filePath = filePath;
         this.newFilePath = newFilePath;
         this.threadTurn = threadTurn;
-        this.thread.run();
+        currentTurn = (currentTurn == 0) ? 1 : currentTurn;
+        this.thread.start();
     }
 
     @Override
     public void run() {
         String fileContent = readFile();
-        synchronized(this) {
-            try {
-                if(currentTurn != this.threadTurn)
-                        this.wait();
-                writeFile(fileContent);
-                currentTurn++;
-                notify();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+            while(currentTurn != this.threadTurn){ }
+
+            writeFile(fileContent);
+            currentTurn++;
     }
 
     public String readFile(){
@@ -68,7 +62,7 @@ public class FileReaderThread implements Runnable {
         return fileContent;
     }
 
-    public void writeFile(String content){
+    public synchronized void writeFile(String content){
         try(java.io.FileWriter fw = new java.io.FileWriter(newFilePath, true);
             BufferedWriter br = new BufferedWriter(fw)){
             br.write(content);
